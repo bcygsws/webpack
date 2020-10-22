@@ -1,18 +1,26 @@
 const path = require('path');
 //  4.x版本webpack实例 CleanWebpackPlugin首字母C必须大写，否则报错：不是一个构造函数
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const htmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
 	mode: 'production',
 	entry: {
-		english: './src/english.js',
-		chinese: './src/chinese.js',
-		math: './src/math.js',
+		// english: './src/english.js',
+		// chinese: './src/chinese.js',
+		// math: './src/math.js',
+		app: './src/main.js',
 	},
 	output: {
 		filename: '[name]-bundle.js',
 		path: path.resolve(__dirname, 'dist'),
 	},
-	plugins: [new CleanWebpackPlugin()],
+	plugins: [
+		new CleanWebpackPlugin(),
+		new htmlWebpackPlugin({
+			template: './src/index.html',
+			filename: 'index.html',
+		}),
+	],
 	optimization: {
 		// 默认为true,表示将压缩代码，此处设置为false,是为了看到打包后代码的效果
 		minimize: false,
@@ -30,5 +38,9 @@ module.exports = {
 		//   //  按照输出文件的filename，生成的文件为manifest-bundle.js
 		//   name:'manifest'
 		// }
+	},
+	// 解析文件module节点
+	module: {
+		rules: [{ test: /\.js|jsx$/, use: 'babel-loader', exclude: /node_modules/ }],
 	},
 };
